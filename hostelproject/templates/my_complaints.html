@@ -1,0 +1,460 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: white;
+            color: #1e3a8a;
+            text-decoration: none;
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .header-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header-card h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .header-card p {
+            color: #6b7280;
+        }
+
+        .complaints-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .complaint-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .complaint-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .submitted {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .under-review {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .in-progress {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(180px, 1fr));
+
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .detail {
+            background: #f8fafc;
+            padding: 13px;
+            border-radius: 7px;
+        }
+
+        .detail-title {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+        }
+
+        .description {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 18px;
+        }
+
+        .description-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .description-text {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .empty {
+            background: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: #6b7280;
+            padding: 30px;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .top-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================== -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🏠 Hostel Complaint Management
+    </div>
+
+    {% if complaints %}
+
+        <a
+            href="{{ url_for(
+                'dashboard',
+                student_id=complaints[0].student_id
+            ) }}"
+            class="back-btn">
+
+            ← Dashboard
+
+        </a>
+
+    {% else %}
+
+        <a
+            href="/login"
+            class="back-btn">
+
+            ← Login
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =========================
+     MAIN
+========================== -->
+
+<div class="container">
+
+
+    <div class="header-card">
+
+        <h1>
+            📋 My Complaints
+        </h1>
+
+        <p>
+            View your submitted hostel complaints and their current status.
+        </p>
+
+    </div>
+
+
+    {% if complaints %}
+
+
+        <div class="complaints-container">
+
+
+            {% for complaint in complaints %}
+
+                <div class="complaint-card">
+
+
+                    <!-- TOP -->
+
+                    <div class="top-row">
+
+                        <div class="complaint-id">
+
+                            Complaint ID:
+                            {{ complaint.complaint_id }}
+
+                        </div>
+
+
+                        {% set status_class =
+                            complaint.status
+                            |lower
+                            |replace(" ", "-")
+                        %}
+
+                        <div class="
+                            status
+                            {{ status_class }}
+                        ">
+
+                            {{ complaint.status }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="details">
+
+
+                        <div class="detail">
+
+                            <div class="detail-title">
+                                Category
+                            </div>
+
+                            <div class="detail-value">
+                                {{ complaint.category }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <div class="detail-title">
+                                Room Number
+                            </div>
+
+                            <div class="detail-value">
+                                {{ complaint.room_number }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <div class="detail-title">
+                                Date & Time
+                            </div>
+
+                            <div class="detail-value">
+
+                                {{ complaint.complaint_date }}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="description">
+
+                        <div class="description-title">
+                            Complaint Description
+                        </div>
+
+                        <div class="description-text">
+
+                            {{ complaint.description }}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- NO COMPLAINTS -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📭
+            </div>
+
+            <h2>
+                No Complaints Yet
+            </h2>
+
+            <p>
+                You have not submitted any hostel complaints.
+            </p>
+
+            <a
+                href="/login"
+                class="submit-btn">
+
+                Go to Login
+
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<footer>
+
+    Hostel Complaint Management System
+
+</footer>
+
+
+</body>
+
+</html>
+```

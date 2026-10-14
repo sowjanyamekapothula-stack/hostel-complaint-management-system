@@ -1,0 +1,426 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Hostel Complaint</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            color: #1e3a8a;
+            background: white;
+            padding: 9px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 750px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .student-info {
+            background: #eff6ff;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .student-info p {
+            margin: 6px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        select,
+        textarea,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        select:focus,
+        textarea:focus,
+        input:focus {
+            border-color: #1e3a8a;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .hint {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .valid-box {
+            margin-top: 25px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .valid-box h3 {
+            color: #166534;
+            margin-bottom: 8px;
+        }
+
+        .valid-box p {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .invalid-box {
+            margin-top: 15px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .invalid-box h3 {
+            color: #b91c1c;
+            margin-bottom: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 28px;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            background: #1e3a8a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #172554;
+        }
+
+        .note {
+            margin-top: 18px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 25px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================== -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🏠 Hostel Complaint Management
+    </div>
+
+    <a
+        href="{{ url_for(
+            'dashboard',
+            student_id=student.student_id
+        ) }}"
+        class="back-btn">
+
+        ← Dashboard
+
+    </a>
+
+</div>
+
+
+<!-- =========================
+     FORM
+========================== -->
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            📝 Submit Hostel Complaint
+        </h1>
+
+        <p class="subtitle">
+            Report a genuine hostel-related problem.
+        </p>
+
+
+        <!-- STUDENT DETAILS -->
+
+        <div class="student-info">
+
+            <p>
+                <strong>Student Name:</strong>
+                {{ student.student_name }}
+            </p>
+
+            <p>
+                <strong>Student ID:</strong>
+                {{ student.student_id }}
+            </p>
+
+            <p>
+                <strong>Room Number:</strong>
+                {{ student.room_number }}
+            </p>
+
+        </div>
+
+
+        <!-- COMPLAINT FORM -->
+
+        <form
+            action="{{ url_for('complaint') }}"
+            method="POST">
+
+
+            <input
+                type="hidden"
+                name="student_name"
+                value="{{ student.student_name }}">
+
+
+            <input
+                type="hidden"
+                name="student_id"
+                value="{{ student.student_id }}">
+
+
+            <input
+                type="hidden"
+                name="room_number"
+                value="{{ student.room_number }}">
+
+
+            <!-- CATEGORY -->
+
+            <label for="category">
+                Complaint Category
+            </label>
+
+            <select
+                id="category"
+                name="category"
+                required>
+
+                <option value="">
+                    -- Select Category --
+                </option>
+
+                <option value="Water">
+                    Water Problem
+                </option>
+
+                <option value="Electricity">
+                    Electricity / Power
+                </option>
+
+                <option value="Room Maintenance">
+                    Room Maintenance
+                </option>
+
+                <option value="Bathroom">
+                    Bathroom / Washroom
+                </option>
+
+                <option value="Cleaning">
+                    Cleaning / Hygiene
+                </option>
+
+                <option value="Food">
+                    Food / Mess
+                </option>
+
+                <option value="Wi-Fi">
+                    Wi-Fi / Internet
+                </option>
+
+                <option value="Furniture">
+                    Furniture
+                </option>
+
+                <option value="Security">
+                    Security
+                </option>
+
+                <option value="Other Hostel Issue">
+                    Other Hostel Issue
+                </option>
+
+            </select>
+
+
+            <!-- DESCRIPTION -->
+
+            <label for="description">
+                Complaint Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                placeholder="Example: Water is not available in our room since morning."
+                required></textarea>
+
+            <p class="hint">
+                Please describe only a genuine hostel-related problem.
+            </p>
+
+
+            <!-- VALID EXAMPLES -->
+
+            <div class="valid-box">
+
+                <h3>
+                    ✅ Valid Complaint Examples
+                </h3>
+
+                <p>
+                    • Water is not available in our room.<br>
+                    • Fan is not working.<br>
+                    • Bathroom needs cleaning.<br>
+                    • Room light is not working.<br>
+                    • Hostel Wi-Fi is not working.<br>
+                    • Food quality in the mess is poor.
+                </p>
+
+            </div>
+
+
+            <!-- INVALID EXAMPLES -->
+
+            <div class="invalid-box">
+
+                <h3>
+                    ❌ Invalid Complaint Examples
+                </h3>
+
+                <p>
+                    • I want a new mobile phone.<br>
+                    • I need money.<br>
+                    • I want new clothes.<br>
+                    • I want a holiday.
+                </p>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn">
+
+                Submit Complaint
+
+            </button>
+
+
+            <p class="note">
+                Invalid or personal requests will not be accepted.
+            </p>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
+```

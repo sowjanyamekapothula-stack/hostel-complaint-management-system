@@ -1,0 +1,407 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================== */
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: white;
+            color: #1e3a8a;
+            text-decoration: none;
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        /* =========================
+           STUDENT INFORMATION
+        ========================== */
+
+        .student-info {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+        }
+
+        .info-card h3 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        /* =========================
+           ACTION CARDS
+        ========================== */
+
+        .actions {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 20px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .action-card h2 {
+            margin-bottom: 10px;
+            color: #1e3a8a;
+        }
+
+        .action-card p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            background: #1e3a8a;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #172554;
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #6b7280;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .welcome h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================== -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🏠 Hostel Complaint Management
+    </div>
+
+    <a href="/login" class="logout">
+        Logout
+    </a>
+
+</div>
+
+
+<!-- =========================
+     MAIN CONTAINER
+========================== -->
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1>
+            Welcome, {{ student.student_name }} 👋
+        </h1>
+
+        <p>
+            Manage your hostel complaints easily from here.
+        </p>
+
+    </div>
+
+
+    <!-- STUDENT INFORMATION -->
+
+    <div class="student-info">
+
+
+        <div class="info-card">
+
+            <h3>
+                Student Name
+            </h3>
+
+            <p>
+                {{ student.student_name }}
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3>
+                Student ID
+            </h3>
+
+            <p>
+                {{ student.student_id }}
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3>
+                Room Number
+            </h3>
+
+            <p>
+                {{ student.room_number }}
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+
+        <!-- SUBMIT COMPLAINT -->
+
+        <div class="action-card">
+
+            <div class="icon">
+                📝
+            </div>
+
+            <h2>
+                Submit Complaint
+            </h2>
+
+            <p>
+                Report a genuine hostel-related problem.
+            </p>
+
+            <a
+                href="{{ url_for(
+                    'complaint',
+                    student_id=student.student_id
+                ) }}"
+                class="btn">
+
+                Submit Complaint
+
+            </a>
+
+        </div>
+
+
+        <!-- MY COMPLAINTS -->
+
+        <div class="action-card">
+
+            <div class="icon">
+                📋
+            </div>
+
+            <h2>
+                My Complaints
+            </h2>
+
+            <p>
+                View your submitted complaints and status.
+            </p>
+
+            <a
+                href="{{ url_for(
+                    'my_complaints',
+                    student_id=student.student_id
+                ) }}"
+                class="btn">
+
+                View Complaints
+
+            </a>
+
+        </div>
+
+
+        <!-- FORGOT PASSWORD -->
+
+        <div class="action-card">
+
+            <div class="icon">
+                🔑
+            </div>
+
+            <h2>
+                Reset Password
+            </h2>
+
+            <p>
+                Change your password if you forget it.
+            </p>
+
+            <a
+                href="{{ url_for('forgot_password') }}"
+                class="btn">
+
+                Reset Password
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================== -->
+
+<footer>
+
+    <p>
+        Hostel Complaint Management System
+    </p>
+
+    <p>
+        Student Portal
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
+```
